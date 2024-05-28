@@ -90,20 +90,6 @@
             <version>5.4.7</version>
         </dependency>
 
-        <!-- websocket 추가 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-websocket</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
-
-        <!-- websocket stomp @MessageMapping, @SendTo 위해 추가 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
-
         <!-- Apache Commons -->
         <dependency>
             <groupId>commons-io</groupId>

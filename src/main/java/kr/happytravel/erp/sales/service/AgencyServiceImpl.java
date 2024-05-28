@@ -3,7 +3,6 @@ package kr.happytravel.erp.sales.service;
 import kr.happytravel.erp.sales.dao.AgencyDao;
 import kr.happytravel.erp.sales.model.AgencyModel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
