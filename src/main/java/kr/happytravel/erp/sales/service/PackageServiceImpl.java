@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +39,12 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
+    @Transactional
     public int insertPackage(Map<String, Object> paramMap) throws Exception {
-        return packageDao.insertPackage(paramMap);
+        logger.info("Starting transaction for insertPackage");
+        int result = packageDao.insertPackage(paramMap);
+        logger.info("Insert result: " + result);
+        return result;
     }
 
     @Override

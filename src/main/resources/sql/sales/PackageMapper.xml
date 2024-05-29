@@ -2,6 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.happytravel.erp.sales.dao.PackageDao">
+    <!--  ////////////////////////////////////// SQL 모듈 블록 ///////////////////////////////////////////////////-->
+    <!-- 사원 권한정보 확인 쿼리 모듈화, 영업쪽에서 CREATE,UPDATE,DELETE는 대리부터 가능 -->
+    <sql id="employmentCondition">
+        EXISTS (
+            SELECT 1
+            FROM happytravel.TB_EMPLOYMENT_INFO
+            WHERE DEPT_CODE = 3000
+            AND STATUS_CODE = 1000
+            AND POS_CODE NOT IN (1000, 1100)
+            AND EMP_ID = #{empId}
+        )
+    </sql>
+    <!-- 총 가격 계산 SQL 블록 -->
+    <sql id="calculateTotalPrice">
+        (
+        (SELECT price FROM TB_HOTEL_INFO WHERE HOTEL_CODE = #{hotelCode}) * DATEDIFF(#{endDate}, #{startDate}) +
+        (SELECT price FROM TB_AGENCY_INFO WHERE AGENCY_CODE = #{agencyCode}) * DATEDIFF(#{endDate}, #{startDate}) +
+        (SELECT price FROM TB_FLIGHT_INFO WHERE FLIGHT_CODE = #{flightCode})
+        )
+    </sql>
+
+    <!-- EXISTS 조건 SQL 블록 -->
+    <sql id="existsCondition">
+        EXISTS (
+        SELECT 1
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        )
+        AND EXISTS (
+        SELECT 1
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        )
+        AND EXISTS (
+        SELECT 1
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        )
+    </sql>
+
+    <!-- COUNTRY와 REGION 검증 SQL 블록 -->
+    <sql id="countryRegionCheck">
+        (
+        SELECT COUNTRY
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        ) = #{country}
+        AND (
+        SELECT COUNTRY
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        ) = #{country}
+        AND (
+        SELECT DESTINATION
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        ) = (
+        SELECT REGION
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        )
+        AND (
+        SELECT DESTINATION
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        ) = (
+        SELECT REGION
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        )
+    </sql>
 
     <!-- 전체 패키지 목록 조회 -->
     <select id="getPackageList" resultType="kr.happytravel.erp.sales.model.sales.PackageModel" parameterType="hashmap">
@@ -48,19 +119,7 @@
         package_code = #{packageCode}
     </select>
 
-    <!-- 사원 권한정보 확인 쿼리 모듈화 -->
-    <sql id="employmentCondition">
-        EXISTS (
-        SELECT 1
-        FROM happytravel.TB_EMPLOYMENT_INFO
-        WHERE DEPT_CODE = 3000
-        AND STATUS_CODE = 1000
-        AND POS_CODE NOT IN (1000, 1100)
-        AND EMP_ID = #{empId}
-        )
-    </sql>
-
-    <!-- 패키지 정보 삽입 -->
+    <!-- INSERT 쿼리 -->
     <insert id="insertPackage" parameterType="hashmap">
         INSERT INTO TB_PACKAGE_INFO (
         PACKAGE_CODE,
@@ -76,7 +135,8 @@
         SALE_END_DATE,
         SALE_AMOUNT,
         ASSIGN_CODE,
-        COUNTRY
+        COUNTRY,
+        IS_USED
         )
         SELECT
         CONCAT('PKG', LPAD(IFNULL(MAX_PACKAGE_NUM + 1, 1), 6, '0')),
@@ -86,38 +146,26 @@
         #{hotelCode},
         #{flightCode},
         #{agencyCode},
-        #{totalPrice},
-        #{salePrice},
+        <include refid="calculateTotalPrice" />,
+        <include refid="calculateTotalPrice" /> * 1.2,
         #{saleStartDate},
         #{saleEndDate},
-        #{saleAmount},
+        0,
         #{assignCode},
-        #{country}
+        #{country},
+        'Y'
         FROM (
-        SELECT MAX(CAST(SUBSTRING(PACKAGE_CODE, 4) AS UNSIGNED)) AS MAX_PACKAGE_NUM
+        SELECT
+        MAX(CAST(SUBSTRING(PACKAGE_CODE, 4) AS UNSIGNED)) AS MAX_PACKAGE_NUM
         FROM TB_PACKAGE_INFO
         WHERE PACKAGE_CODE LIKE 'PKG%'
         ) AS subquery
-        WHERE EXISTS (
-        SELECT 1
-        FROM TB_AGENCY_INFO
-        WHERE AGENCY_CODE = #{agencyCode}
-        )
-        AND EXISTS (
-        SELECT 1
-        FROM TB_FLIGHT_INFO
-        WHERE FLIGHT_CODE = #{flightCode}
-        )
-        AND EXISTS (
-        SELECT 1
-        FROM TB_HOTEL_INFO
-        WHERE HOTEL_CODE = #{hotelCode}
-        )
-        AND #{totalPrice} * 1.2 = #{salePrice}
+        WHERE <include refid="existsCondition" />
+        AND <include refid="countryRegionCheck" />
         AND <include refid="employmentCondition" />;
     </insert>
 
-    <!-- 단건 수정 -->
+    <!-- UPDATE 쿼리 -->
     <update id="updatePackage" parameterType="hashmap">
         UPDATE TB_PACKAGE_INFO
         SET
@@ -127,17 +175,22 @@
         HOTEL_CODE = #{hotelCode},
         FLIGHT_CODE = #{flightCode},
         AGENCY_CODE = #{agencyCode},
-        TOTAL_PRICE = #{totalPrice},
-        SALE_PRICE = #{salePrice},
+        TOTAL_PRICE =<include refid="calculateTotalPrice"/>,
+        SALE_PRICE =
+        <include refid="calculateTotalPrice"/>
+        * 1.2,
         SALE_START_DATE = #{saleStartDate},
         SALE_END_DATE = #{saleEndDate},
-        SALE_AMOUNT = #{saleAmount},
         ASSIGN_CODE = #{assignCode},
         COUNTRY = #{country}
         WHERE
         PACKAGE_CODE = #{packageCode}
-        AND #{salePrice} >= #{totalPrice} * 1.2
-        AND <include refid="employmentCondition" />;
+        AND <![CDATA[ <include refid="calculateTotalPrice" /> * 1.2 <= #{salePrice} ]]>
+        AND
+        <include refid="existsCondition"/>
+        AND
+        <include refid="countryRegionCheck"/>
+        AND<include refid="employmentCondition"/>;
     </update>
 
     <!-- 단건 삭제 -->
@@ -145,7 +198,7 @@
         DELETE FROM TB_PACKAGE_INFO
         WHERE
         PACKAGE_CODE = #{packageCode}
-        AND <include refid="employmentCondition" />;
+        AND<include refid="employmentCondition"/>;
     </delete>
 
 </mapper>
