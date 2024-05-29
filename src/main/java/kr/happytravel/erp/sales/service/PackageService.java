@@ -23,4 +23,8 @@ public interface PackageService {
 
     // 단건 삭제
     int updatePackageYN(Map<String, Object> paramMap) throws Exception;
+
+    // 패키지  assign 승인 or 반려, default 대기중 1000
+    int assignPackage(Map<String, Object> paramMap) throws Exception;
+
 }

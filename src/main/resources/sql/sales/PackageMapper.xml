@@ -3,8 +3,19 @@
 
 <mapper namespace="kr.happytravel.erp.sales.dao.PackageDao">
     <!--  ////////////////////////////////////// SQL 모듈 블록 ///////////////////////////////////////////////////-->
+    <!-- 영업부서 아니면 영업쪽 READ 불가능하게만들기-->
+    <sql id="readCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE (DEPT_CODE = 3000 OR 9000)
+        AND STATUS_CODE = 1000
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
     <!-- 사원 권한정보 확인 쿼리 모듈화, 영업쪽에서 CREATE,UPDATE,DELETE는 대리부터 가능 -->
-    <sql id="employmentCondition">
+    <sql id="CRUDCondition">
         EXISTS (
             SELECT 1
             FROM happytravel.TB_EMPLOYMENT_INFO
@@ -12,6 +23,18 @@
             AND STATUS_CODE = 1000
             AND POS_CODE NOT IN (1000, 1100)
             AND EMP_ID = #{empId}
+        )
+    </sql>
+    <!--영업부서 부장이상 권한 확인하여 결제상채변경 쿼리 모듈-->
+    <sql id="managerCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE DEPT_CODE = 3000
+        AND STATUS_CODE = 1000
+        <!--이하 부장 아래들-->
+        AND POS_CODE NOT IN (1000, 1100, 1200, 1300, 1400)
+        AND EMP_ID = #{empId}
         )
     </sql>
     <!-- 총 가격 계산 SQL 블록 -->
@@ -86,14 +109,16 @@
         COUNTRY
         FROM
         TB_PACKAGE_INFO
+        WHERE <include refid="readCondition"/>
         ORDER BY
-        package_code
+        package_code;
     </select>
 
     <!-- 전체 목록 카운트 -->
     <select id="getPackageCnt" resultType="int" parameterType="hashmap">
         SELECT COUNT(package_code)
         FROM TB_PACKAGE_INFO
+        WHERE <include refid="readCondition"/>;
     </select>
 
     <!-- 단건 조회 -->
@@ -116,7 +141,8 @@
         FROM
         TB_PACKAGE_INFO
         WHERE
-        package_code = #{packageCode}
+        <include refid="employmentCondition"/>;
+        AND package_code = #{packageCode}
     </select>
 
     <!-- INSERT 쿼리 -->
@@ -151,7 +177,7 @@
         #{saleStartDate},
         #{saleEndDate},
         0,
-        #{assignCode},
+        1000,
         #{country},
         'Y'
         FROM (
@@ -161,7 +187,7 @@
         WHERE PACKAGE_CODE LIKE 'PKG%'
         ) AS subquery
         WHERE <include refid="countryRegionCheck" />
-        AND <include refid="employmentCondition" />;
+        AND <include refid="CRUDCondition" />;
     </insert>
 
     <!-- UPDATE 쿼리 -->
@@ -178,12 +204,11 @@
         SALE_PRICE = <include refid="calculateTotalPrice"/> * 1.2,
         SALE_START_DATE = #{saleStartDate},
         SALE_END_DATE = #{saleEndDate},
-        ASSIGN_CODE = #{assignCode},
         COUNTRY = #{country}
         WHERE
         PACKAGE_CODE = #{packageCode}
         AND <include refid="countryRegionCheck"/>
-        AND <include refid="employmentCondition"/>;
+        AND <include refid="CRUDCondition"/>;
     </update>
 
     <!-- 단건 IS_USED 비활성화  -->
@@ -192,7 +217,15 @@
         SET IS_USED = 'N'
         WHERE
         PACKAGE_CODE = #{packageCode}
-        AND <include refid="employmentCondition"/>;
+        AND <include refid="CRUDCondition"/>;
     </update>
 
+    <!--생성된후 진행중인 패키지 승인여부(1000= 진행중, 2000=승인, 3000=반려)-->
+    <update id="assignPackage" parameterType="hashmap">
+        UPDATE TB_PACKAGE_INFO
+        SET ASSIGN_CODE = #{assignCode}
+        WHERE
+        PACKAGE_CODE = #{packageCode}
+        AND <include refid="managerCondition"/>;
+    </update>
 </mapper>

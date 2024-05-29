@@ -58,6 +58,18 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public int updatePackageYN(Map<String, Object> paramMap) throws Exception {
-        return packageDao.updatePackageYN(paramMap);
+        logger.info("Starting for updatePackage IS_USED Y/N");
+        int result = packageDao.updatePackageYN(paramMap);
+        logger.info("Update Y/N result: " + result);
+        return result;
+
+    }
+
+    @Override
+    public int assignPackage(Map<String, Object> paramMap) throws Exception {
+        logger.info("Starting for updatePackage ASSIGN_CODE to 1000 OR 2000 OR 3000");
+        int result = packageDao.assignPackage(paramMap);
+        logger.info("Update assign result: " + paramMap.values());
+        return result;
     }
 }

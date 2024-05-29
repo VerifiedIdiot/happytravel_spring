@@ -87,8 +87,20 @@ public class PackageController {
     public ResponseEntity<Boolean> updatePackageYN(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
                                              HttpServletResponse response, HttpSession session) throws Exception {
         try {
-            logger.info("Received request to delete package with parameters: " + paramMap);
+            logger.info("Received request to Y/N package with parameters: " + paramMap);
             return ResponseEntity.ok(packageService.updatePackageYN(paramMap) == 1);
+        } catch (Exception e) {
+            logger.error("An error occurred: " + e.getMessage(), e);
+            return ResponseEntity.ok(false);
+        }
+    }
+
+    @PutMapping("/package-assign")
+    public ResponseEntity<Boolean> assignPackage(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
+                                                   HttpServletResponse response, HttpSession session) throws Exception {
+        try {
+            logger.info("Received request to assingn package with parameters: " + paramMap);
+            return ResponseEntity.ok(packageService.assignPackage(paramMap) == 1);
         } catch (Exception e) {
             logger.error("An error occurred: " + e.getMessage(), e);
             return ResponseEntity.ok(false);

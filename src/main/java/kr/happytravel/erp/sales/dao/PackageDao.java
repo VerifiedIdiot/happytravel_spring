@@ -24,4 +24,6 @@ public interface PackageDao {
 
     // 단건 삭제
     int updatePackageYN(Map<String, Object> paramMap) throws Exception;
+
+    int assignPackage(Map<String, Object> paramMap) throws Exception;
 }
