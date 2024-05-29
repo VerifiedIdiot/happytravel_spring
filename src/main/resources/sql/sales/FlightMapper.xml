@@ -4,7 +4,7 @@
 <mapper namespace="kr.happytravel.erp.sales.dao.FlightDao">
 
     <!-- 전체 항공편 목록 조회 -->
-    <select id="getFlightList" resultType="kr.happytravel.erp.sales.model.FlightModel" parameterType="hashmap">
+    <select id="getFlightList" resultType="kr.happytravel.erp.sales.model.sales.FlightModel" parameterType="hashmap">
         SELECT
         flight_code,
         airline,
@@ -30,7 +30,7 @@
     </select>
 
     <!-- 단건 조회 -->
-    <select id="selectFlight" resultType="kr.happytravel.erp.sales.model.FlightModel">
+    <select id="selectFlight" resultType="kr.happytravel.erp.sales.model.sales.FlightModel">
         SELECT
         flight_code,
         airline,

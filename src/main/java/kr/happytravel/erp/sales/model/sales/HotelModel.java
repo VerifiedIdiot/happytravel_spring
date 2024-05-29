@@ -1,4 +1,4 @@
-package kr.happytravel.erp.sales.model;
+package kr.happytravel.erp.sales.model.sales;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

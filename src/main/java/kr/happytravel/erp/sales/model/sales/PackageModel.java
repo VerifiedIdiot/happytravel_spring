@@ -1,4 +1,4 @@
-package kr.happytravel.erp.sales.model;
+package kr.happytravel.erp.sales.model.sales;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,6 +20,7 @@ import java.util.Date;
 public class PackageModel {
     private String packageCode;
     private String packageName;
+    private String country;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
     private Date startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
@@ -35,5 +36,4 @@ public class PackageModel {
     private Date saleEndDate;
     private int saleAmount;
     private String assignCode;
-    private String isUsed;
 }

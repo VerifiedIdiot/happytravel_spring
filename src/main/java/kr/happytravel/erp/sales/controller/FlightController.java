@@ -1,7 +1,7 @@
 package kr.happytravel.erp.sales.controller;
 
 
-import kr.happytravel.erp.sales.model.FlightModel;
+import kr.happytravel.erp.sales.model.sales.FlightModel;
 import kr.happytravel.erp.sales.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;

@@ -1,6 +1,8 @@
 package kr.happytravel.erp.sales.dao;
 
-import kr.happytravel.erp.sales.model.PackageModel;
+import kr.happytravel.erp.sales.model.sales.PackageModel;
+
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +17,10 @@ public interface PackageDao {
     PackageModel selectPackage(Map<String, Object> paramMap) throws Exception;
 
     // 단건 등록
-    int insertPackage(PackageModel packageModel) throws Exception;
+    int insertPackage(Map<String, Object> paramMap) throws Exception;
 
     // 단건 수정
-    int updatePackage(PackageModel packageModel) throws Exception;
+    int updatePackage(Map<String, Object> paramMap) throws Exception;
 
     // 단건 삭제
     int deletePackage(Map<String, Object> paramMap) throws Exception;

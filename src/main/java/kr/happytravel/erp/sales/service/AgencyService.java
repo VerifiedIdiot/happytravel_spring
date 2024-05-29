@@ -1,6 +1,6 @@
 package kr.happytravel.erp.sales.service;
 
-import kr.happytravel.erp.sales.model.AgencyModel;
+import kr.happytravel.erp.sales.model.sales.AgencyModel;
 import java.util.List;
 import java.util.Map;
 

@@ -4,7 +4,7 @@
 <mapper namespace="kr.happytravel.erp.sales.dao.AgencyDao">
 
     <!-- 전체 에이전시 목록 조회 -->
-    <select id="getAgencyList" resultType="kr.happytravel.erp.sales.model.AgencyModel" parameterType="hashmap">
+    <select id="getAgencyList" resultType="kr.happytravel.erp.sales.model.sales.AgencyModel" parameterType="hashmap">
         SELECT
         agency_code,
         agency_name,
@@ -28,7 +28,7 @@
     </select>
 
     <!-- 단건 조회 -->
-    <select id="selectAgency" resultType="kr.happytravel.erp.sales.model.AgencyModel">
+    <select id="selectAgency" resultType="kr.happytravel.erp.sales.model.sales.AgencyModel">
         SELECT
         agency_code,
         agency_name,

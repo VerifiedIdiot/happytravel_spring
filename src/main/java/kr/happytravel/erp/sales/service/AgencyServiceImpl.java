@@ -1,7 +1,7 @@
 package kr.happytravel.erp.sales.service;
 
 import kr.happytravel.erp.sales.dao.AgencyDao;
-import kr.happytravel.erp.sales.model.AgencyModel;
+import kr.happytravel.erp.sales.model.sales.AgencyModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,8 @@
 package kr.happytravel.erp.sales.service;
 
 import kr.happytravel.erp.sales.dao.HotelDao;
-import kr.happytravel.erp.sales.model.HotelModel;
+import kr.happytravel.erp.sales.model.sales.HotelModel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
