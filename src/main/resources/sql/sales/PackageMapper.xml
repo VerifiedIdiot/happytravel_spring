@@ -186,12 +186,13 @@
         AND <include refid="employmentCondition"/>;
     </update>
 
-    <!-- 단건 삭제 -->
-    <delete id="deletePackage" parameterType="hashmap">
-        DELETE FROM TB_PACKAGE_INFO
+    <!-- 단건 IS_USED 비활성화  -->
+    <update id="updatePackageYN" parameterType="hashmap">
+        UPDATE TB_PACKAGE_INFO
+        SET IS_USED = 'N'
         WHERE
         PACKAGE_CODE = #{packageCode}
-        AND<include refid="employmentCondition"/>;
-    </delete>
+        AND <include refid="employmentCondition"/>;
+    </update>
 
 </mapper>

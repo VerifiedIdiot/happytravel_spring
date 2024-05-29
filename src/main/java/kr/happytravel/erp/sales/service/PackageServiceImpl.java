@@ -48,12 +48,16 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
+    @Transactional
     public int updatePackage(Map<String, Object> paramMap) throws Exception {
-        return packageDao.updatePackage(paramMap);
+        logger.info("Starting transaction for updatePackage");
+        int result = packageDao.updatePackage(paramMap);
+        logger.info("Update result: " + result);
+        return result;
     }
 
     @Override
-    public int deletePackage(Map<String, Object> paramMap) throws Exception {
-        return packageDao.deletePackage(paramMap);
+    public int updatePackageYN(Map<String, Object> paramMap) throws Exception {
+        return packageDao.updatePackageYN(paramMap);
     }
 }
