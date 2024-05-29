@@ -160,8 +160,7 @@
         FROM TB_PACKAGE_INFO
         WHERE PACKAGE_CODE LIKE 'PKG%'
         ) AS subquery
-        WHERE <include refid="existsCondition" />
-        AND <include refid="countryRegionCheck" />
+        WHERE <include refid="countryRegionCheck" />
         AND <include refid="employmentCondition" />;
     </insert>
 
@@ -175,22 +174,16 @@
         HOTEL_CODE = #{hotelCode},
         FLIGHT_CODE = #{flightCode},
         AGENCY_CODE = #{agencyCode},
-        TOTAL_PRICE =<include refid="calculateTotalPrice"/>,
-        SALE_PRICE =
-        <include refid="calculateTotalPrice"/>
-        * 1.2,
+        TOTAL_PRICE = <include refid="calculateTotalPrice"/>,
+        SALE_PRICE = <include refid="calculateTotalPrice"/> * 1.2,
         SALE_START_DATE = #{saleStartDate},
         SALE_END_DATE = #{saleEndDate},
         ASSIGN_CODE = #{assignCode},
         COUNTRY = #{country}
         WHERE
         PACKAGE_CODE = #{packageCode}
-        AND <![CDATA[ <include refid="calculateTotalPrice" /> * 1.2 <= #{salePrice} ]]>
-        AND
-        <include refid="existsCondition"/>
-        AND
-        <include refid="countryRegionCheck"/>
-        AND<include refid="employmentCondition"/>;
+        AND <include refid="countryRegionCheck"/>
+        AND <include refid="employmentCondition"/>;
     </update>
 
     <!-- 단건 삭제 -->
