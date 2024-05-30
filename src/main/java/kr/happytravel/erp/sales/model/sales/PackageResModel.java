@@ -17,7 +17,7 @@ import java.util.Date;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PackageModel {
+public class PackageResModel {
     private String packageCode;
     private String packageName;
     private String country;
