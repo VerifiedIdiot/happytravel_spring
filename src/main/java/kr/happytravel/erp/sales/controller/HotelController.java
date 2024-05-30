@@ -21,7 +21,7 @@ import java.util.Map;
 public class HotelController {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final HotelService hotelService;
-
+    // 확인
     // Create
     @PostMapping("/hotel")
     public ResponseEntity<String> createHotel(@RequestBody HotelModel hotel, HttpServletRequest request,
