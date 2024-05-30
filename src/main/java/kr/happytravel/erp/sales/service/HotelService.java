@@ -12,14 +12,15 @@ public interface HotelService {
     int getHotelCnt(Map<String, Object> paramMap) throws Exception;
 
     // 호텔 단건 조회
-    HotelModel selectHotel(Map<String, Object> paramMap) throws Exception;
+    HotelModel selectHotel( Map<String, Object> paramMap ) throws Exception;
 
     // 호텔 단건 등록
-    int insertHotel(HotelModel hotel) throws Exception;
+    int insertHotel(Map<String, Object> paramMap) throws Exception;
 
     // 호텔 단건 수정
-    int updateHotel(HotelModel hotel) throws Exception;
+    int updateHotel(Map<String, Object> paramMap) throws Exception;
 
     // 호텔 단건 삭제
-    int deleteHotel(Map<String, Object> paramMap) throws Exception;
+    int updateHotelYN(Map<String, Object> paramMap) throws Exception;
 }
+

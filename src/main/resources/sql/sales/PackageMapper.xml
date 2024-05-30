@@ -141,7 +141,7 @@
         FROM
         TB_PACKAGE_INFO
         WHERE
-        <include refid="employmentCondition"/>;
+        <include refid="readCondition"/>;
         AND package_code = #{packageCode}
     </select>
 
