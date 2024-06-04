@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Console Appender with color-coded logging -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="%style{%d{yyyy-MM-dd HH:mm:ss}}{cyan} %highlight{%-5level %c{1}:%L - %msg%n}{FATAL=bg_red, ERROR=red WARN=yellow INFO=green, DEBUG=blue, TRACE=magenta}"/>
+        </Console>
+
+        <!-- File Appender -->
+        <File name="File" fileName="logs/app.log" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1}:%L - %msg%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+
+<!--        &lt;!&ndash; MyBatis SQL Logger &ndash;&gt;-->
+<!--        <Logger name="org.mybatis" level="debug" additivity="false">-->
+<!--            <AppenderRef ref="Console"/>-->
+<!--            <AppenderRef ref="File"/>-->
+<!--        </Logger>-->
+        <!-- Specific Logger for debugging -->
+        <Logger name="kr.happytravel" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+    </Loggers>
+</Configuration>

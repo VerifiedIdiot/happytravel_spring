@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 맵퍼네임 -->
+<mapper namespace="kr.happytravel.erp.sales.dao.HotelDao">
+
+    <!-- SQL 모듈 블록 -->
+    <!-- 영업부서가 아니면 영업쪽 READ 불가능 -->
+    <sql id="readCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE (DEPT_CODE = 3000 OR 9000)
+        AND STATUS_CODE = 1000
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
+    <!-- 사원 권한정보 확인 쿼리 모듈화, 영업쪽에서 CREATE, UPDATE, DELETE는 대리부터 가능 -->
+    <sql id="CRUDCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE DEPT_CODE = 3000
+        AND STATUS_CODE = 1000
+        AND POS_CODE NOT IN (1000, 1100)
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
+
+    <!-- 전체 호텔 목록 조회 -->
+    <select id="getHotelList" resultType="kr.happytravel.erp.sales.model.sales.HotelModel" parameterType="hashmap">
+
+        SELECT
+        hotel_code,
+        hotel_name,
+        phone,
+        country,
+        region,
+        address,
+        price,
+        is_used
+        FROM
+        TB_HOTEL_INFO
+        WHERE <include refid="readCondition" />
+        ORDER BY
+        hotel_code
+        <!-- LIMIT #{pageIndex}, #{pageSize} -->
+    </select>
+
+    <!-- 전체 목록 카운트 -->
+    <select id="getHotelCnt" resultType="int" parameterType="map">
+        SELECT COUNT(hotelCode)
+        FROM TB_HOTEL_INFO
+        WHERE <include refid="readCondition"/>;
+    </select>
+
+
+    <select id="selectHotel" resultType="kr.happytravel.erp.sales.model.sales.HotelModel" parameterType="hashmap">
+        SELECT
+        hotel_code,
+        hotel_name,
+        phone,
+        country,
+        region,
+        address,
+        price,
+        is_used
+        FROM TB_HOTEL_INFO
+        WHERE <include refid="readCondition" />
+        AND hotel_code = #{hotelCode};
+    </select>
+
+
+    <insert id="insertHotel" parameterType="hashmap">
+        INSERT INTO TB_HOTEL_INFO (
+        hotel_code,
+        hotel_name,
+        phone,
+        country,
+        region,
+        address,
+        price,
+        is_used
+        ) VALUES (
+        #{hotelCode},
+        #{hotelName},
+        #{phone},
+        #{country},
+        #{region},
+        #{address},
+        #{price},
+        #{isUsed}
+        )
+    </insert>
+
+    <update id="updateHotel" parameterType="hashmap">
+        UPDATE TB_HOTEL_INFO
+        SET
+        hotel_name = #{hotelName},
+        phone = #{phone},
+        country = #{country},
+        region = #{region},
+        address = #{address},
+        price = #{price}
+        WHERE
+        hotel_code = #{hotelCode}
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+    <!-- 단건 IS_USED 비활성화  -->
+    <update id="updateHotelYN" parameterType="map">
+        UPDATE TB_HOTEL_INFO
+        SET IS_USED = 'N'
+        WHERE
+        HOTEL_CODE = #{hotelCode}
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+</mapper>

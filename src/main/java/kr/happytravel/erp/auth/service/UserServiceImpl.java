@@ -29,7 +29,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserModel user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.insertUser(user);
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userDao.insertUser(user);
+            logger.info("User {} registered successfully", user.getUsername());
+        } catch (Exception e) {
+            logger.error("Error registering user: {}", user.getUsername(), e);
+            throw new RuntimeException("User registration failed");
+        }
     }
 }

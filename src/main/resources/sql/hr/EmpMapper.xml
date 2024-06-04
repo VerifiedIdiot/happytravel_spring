@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happytravel.erp.hr.dao.EmpDao">
+
+    <!-- 사원 전체 조회 -->
+    <select id="totalemplist" resultType="kr.happytravel.erp.hr.model.EmpModel">
+        select *
+        from TB_EMPLOYMENT_INFO emp
+        inner join TB_DEPARTMENT_INFO dep
+        join TB_POSITION_INFO pos
+        on emp.DEPT_CODE = dep.DEPT_CODE and emp.POS_CODE = pos.POS_CODE;
+    </select>
+
+    <!-- 사원 검색 조회 -->
+    <select id="searchemplist" resultType="kr.happytravel.erp.hr.model.EmpModel">
+        SELECT emp.EMP_ID
+              ,emp.EMP_NAME
+              ,dep.DEPT_NAME
+              ,pos.POS_NAME
+        FROM TB_EMPLOYMENT_INFO emp
+        JOIN TB_DEPARTMENT_INFO dep ON emp.DEPT_CODE = dep.DEPT_CODE
+        JOIN TB_POSITION_INFO pos ON emp.POS_CODE = pos.POS_CODE
+        where emp.EMP_NAME
+        like '%혜%'
+        <!--
+        where #{option.value}
+        like #{input.value}
+        group by #{option.value};
+        -->
+    </select>
+
+    <!-- 사원 단건 조회 (수정할때 필요한가..?)-->
+    <select id="selectemp">
+        select *
+        from TB_EMPLOYMENT_INFO
+        where EMP_ID = #{empId};
+    </select>
+
+    <!-- 신규 사원 등록 -->
+    <insert id="insertemp">
+        insert into TB_EMPLOYMENT_INFO
+        (PHOTO_URL
+        ,EMP_ID
+        ,PASSWORD
+        ,EMP_NAME
+        ,JOIN_DATE
+        ,SSN
+        ,ZIP_CODE
+        ,ADDRESS
+        ,ADDRESS_DETAIL
+        ,PHONE
+        ,MOBILE
+        ,DEPT_CODE
+        ,POS_CODE
+        ,STATUS_CODE
+        ,LEAVE_DATE
+        ,BANK_CODE
+        ,ACCOUNT_NO
+        ,SALARY
+        ,REMAERKS
+        ) values (
+        #{photoUrl},
+        #{empId},
+        #{password}
+        #{empName},
+        #{joinDate},
+        #{ssn},
+        #{zipCode},
+        #{address},
+        #{addressDetail},
+        #{phone},
+        #{mobile},
+        #{deptCode},
+        #{posCode},
+        #{statusCode},
+        #{leaveDate},
+        #{bankCode},
+        #{accountNo},
+        #{salary},
+        #{remaerks}
+        )
+    </insert>
+    <!-- 사원 정보 수정 -->
+    <update id="updateemp">
+        update TB_EMPLOYMENT_INFO
+        set PHOTO_URL = #{photoUrl}
+        ,PASSWORD = #{password}
+        ,ZIP_CODE = #{zipCode}
+        ,ADDRESS = #{address}
+        ,ADDRESS_DETAIL = #{addressDetail}
+        ,PHONE = #{phone}
+        ,MOBILE = #{mobile}
+        ,DEPT_CODE = #{deptCode}
+        ,POS_CODE = #{posCode}
+        ,STATUS_CODE = #{statusCode}
+        ,LEAVE_DATE = #{leaveDate}
+        ,BANK_CODE = #{bankCode}
+        ,ACCOUNT_NO = #{accountNo}
+        ,SALARY = #{salary}
+        ,REMAERKS = #{remaerks}
+        where EMP_ID = #{empId}
+    </update>
+
+    <!-- 제일 마지막 사원번호 조회 ++
+        년도가 넘어가면...??
+    -->
+    <select id="latestempid">
+        select EMP_ID from TB_EMPLOYMENT_INFO group by EMP_ID desc limit 1
+    </select>
+
+</mapper>

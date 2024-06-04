@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happytravel.erp.sales.dao.FlightDao">
+
+    <!-- SQL 모듈 블록 -->
+    <!-- 영업부서가 아니면 영업쪽 READ 불가능 -->
+    <sql id="readCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE (DEPT_CODE = 3000 OR 9000)
+        AND STATUS_CODE = 1000
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
+    <!-- 사원 권한정보 확인 쿼리 모듈화, 영업쪽에서 CREATE, UPDATE, DELETE는 대리부터 가능 -->
+    <sql id="CRUDCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE DEPT_CODE = 3000
+        AND STATUS_CODE = 1000
+        AND POS_CODE NOT IN (1000, 1100)
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
+    <!-- 전체 항공편 목록 조회 -->
+    <select id="getFlightList" resultType="kr.happytravel.erp.sales.model.sales.FlightModel" parameterType="hashmap">
+        SELECT
+        flight_code,
+        airline,
+        flight_number,
+        phone,
+        departure,
+        departure_time,
+        destination,
+        arrival_time,
+        price,
+        is_used
+        FROM
+        TB_FLIGHT_INFO
+        WHERE <include refid="readCondition" />
+        ORDER BY
+        flight_code
+        <!--        LIMIT #{pageIndex}, #{pageSize}-->
+    </select>
+
+    <!-- 전체 목록 카운트 -->
+    <select id="getFlightCnt" resultType="int" parameterType="map">
+        SELECT COUNT(flightCode)
+        FROM TB_FLIGHT_INFO
+        WHERE <include refid="readCondition" />
+    </select>
+
+    <!-- 단건 조회 -->
+    <select id="selectFlight" resultType="kr.happytravel.erp.sales.model.sales.FlightModel">
+        SELECT
+        flight_code,
+        airline,
+        flight_number,
+        phone,
+        departure,
+        departure_time,
+        destination,
+        arrival_time,
+        price,
+        is_used
+        FROM
+        TB_FLIGHT_INFO
+        WHERE <include refid="readCondition" />
+        AND flight_code = #{flightCode}
+    </select>
+
+    <!-- 신규 등록 -->
+    <insert id="insertFlight">
+        INSERT INTO TB_FLIGHT_INFO (
+        flight_code,
+        airline,
+        flight_number,
+        phone,
+        departure,
+        departure_time,
+        destination,
+        arrival_time,
+        price,
+        is_used
+        ) VALUES (
+        #{flightCode},
+        #{airline},
+        #{flightNumber},
+        #{phone},
+        #{departure},
+        #{departureTime},
+        #{destination},
+        #{arrivalTime},
+        #{price},
+        #{isUsed}
+        )
+    </insert>
+
+    <!-- 단건 수정 -->
+    <update id="updateFlight" parameterType="hashmap">
+        UPDATE TB_FLIGHT_INFO
+        SET
+        airline = #{airline},
+        flight_number = #{flightNumber},
+        phone = #{phone},
+        departure = #{departure},
+        departure_time = #{departureTime},
+        destination = #{destination},
+        arrival_time = #{arrivalTime},
+        price = #{price},
+        is_used = #{isUsed}
+        WHERE
+        flight_code = #{flightCode}
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+    <!-- 단건 IS_USED 비활성화  -->
+    <update id="updateFlightYN" parameterType="map">
+        UPDATE TB_FLIGHT_INFO
+        SET IS_USED = 'N'
+        WHERE
+        FLIGHT_CODE = #{flightCode}
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happytravel.erp.sales.dao.PackageDao">
+    <!--  ////////////////////////////////////// SQL 모듈 블록 ///////////////////////////////////////////////////-->
+    <!-- 영업부서 아니면 영업쪽 READ 불가능하게만들기-->
+    <sql id="readCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE (DEPT_CODE = 3000 OR 9000)
+        AND STATUS_CODE = 1000
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+
+    <!-- 사원 권한정보 확인 쿼리 모듈화, 영업쪽에서 CREATE,UPDATE,DELETE는 대리부터 가능 -->
+    <sql id="CRUDCondition">
+        EXISTS (
+            SELECT 1
+            FROM happytravel.TB_EMPLOYMENT_INFO
+            WHERE DEPT_CODE = 3000
+            AND STATUS_CODE = 1000
+            AND POS_CODE NOT IN (1000, 1100)
+            AND EMP_ID = #{empId}
+        )
+    </sql>
+    <!--영업부서 부장이상 권한 확인하여 결제상채변경 쿼리 모듈-->
+    <sql id="managerCondition">
+        EXISTS (
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE DEPT_CODE = 3000
+        AND STATUS_CODE = 1000
+        <!--이하 부장 아래들-->
+        AND POS_CODE NOT IN (1000, 1100, 1200, 1300, 1400)
+        AND EMP_ID = #{empId}
+        )
+    </sql>
+    <!-- 총 가격 계산 SQL 블록 -->
+    <sql id="calculateTotalPrice">
+        (
+        (SELECT price FROM TB_HOTEL_INFO WHERE HOTEL_CODE = #{hotelCode}) * DATEDIFF(#{endDate}, #{startDate}) +
+        (SELECT price FROM TB_AGENCY_INFO WHERE AGENCY_CODE = #{agencyCode}) * DATEDIFF(#{endDate}, #{startDate}) +
+        (SELECT price FROM TB_FLIGHT_INFO WHERE FLIGHT_CODE = #{flightCode})
+        )
+    </sql>
+
+    <!-- EXISTS 조건 SQL 블록 -->
+    <sql id="existsCondition">
+        EXISTS (
+        SELECT 1
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        )
+        AND EXISTS (
+        SELECT 1
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        )
+        AND EXISTS (
+        SELECT 1
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        )
+    </sql>
+
+    <!-- COUNTRY와 REGION 검증 SQL 블록 -->
+    <sql id="countryRegionCheck">
+        (
+        SELECT COUNTRY
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        ) = #{country}
+        AND (
+        SELECT COUNTRY
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        ) = #{country}
+        AND (
+        SELECT DESTINATION
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        ) = (
+        SELECT REGION
+        FROM TB_AGENCY_INFO
+        WHERE AGENCY_CODE = #{agencyCode}
+        )
+        AND (
+        SELECT DESTINATION
+        FROM TB_FLIGHT_INFO
+        WHERE FLIGHT_CODE = #{flightCode}
+        ) = (
+        SELECT REGION
+        FROM TB_HOTEL_INFO
+        WHERE HOTEL_CODE = #{hotelCode}
+        )
+    </sql>
+
+    <!-- 전체 패키지 목록 조회 -->
+    <select id="getPackageList" resultType="kr.happytravel.erp.sales.model.sales.packages.PackageListDTO" parameterType="hashmap">
+        SELECT
+        package_code,
+        package_name,
+        start_date,
+        end_date,
+        sale_start_date,
+        sale_end_date,
+        assign_code,
+        COUNTRY
+        FROM
+        TB_PACKAGE_INFO
+        WHERE <include refid="readCondition"/>
+        AND IS_USED != 'N'
+        ORDER BY
+        package_code;
+    </select>
+
+    <!-- 전체 목록 카운트 -->
+    <select id="getPackageCnt" resultType="int" parameterType="hashmap">
+        SELECT COUNT(package_code)
+        FROM TB_PACKAGE_INFO
+        WHERE <include refid="readCondition"/>
+        AND IS_USED != 'N';
+    </select>
+
+    <!-- 단건 조회 -->
+    <select id="selectPackage" resultType="kr.happytravel.erp.sales.model.sales.packages.PackageModel" parameterType="hashmap">
+        SELECT
+        package_code,
+        package_name,
+        start_date,
+        end_date,
+        hotel_code,
+        flight_code,
+        agency_code,
+        total_price,
+        sale_price,
+        sale_start_date,
+        sale_end_date,
+        sale_amount,
+        assign_code,
+        COUNTRY
+        FROM
+        TB_PACKAGE_INFO
+        WHERE
+        <include refid="readCondition"/>;
+        AND package_code = #{packageCode}
+    </select>
+
+    <!-- INSERT 쿼리 -->
+    <insert id="insertPackage" parameterType="hashmap">
+        INSERT INTO TB_PACKAGE_INFO (
+        PACKAGE_CODE,
+        PACKAGE_NAME,
+        START_DATE,
+        END_DATE,
+        HOTEL_CODE,
+        FLIGHT_CODE,
+        AGENCY_CODE,
+        TOTAL_PRICE,
+        SALE_PRICE,
+        SALE_START_DATE,
+        SALE_END_DATE,
+        SALE_AMOUNT,
+        ASSIGN_CODE,
+        COUNTRY,
+        IS_USED
+        )
+        SELECT
+        CONCAT('PKG', LPAD(IFNULL(MAX_PACKAGE_NUM + 1, 1), 6, '0')),
+        #{packageName},
+        #{startDate},
+        #{endDate},
+        #{hotelCode},
+        #{flightCode},
+        #{agencyCode},
+        <include refid="calculateTotalPrice" />,
+        <include refid="calculateTotalPrice" /> * 1.2,
+        #{saleStartDate},
+        #{saleEndDate},
+        0,
+        1000,
+        #{country},
+        'Y'
+        FROM (
+        SELECT
+        MAX(CAST(SUBSTRING(PACKAGE_CODE, 4) AS UNSIGNED)) AS MAX_PACKAGE_NUM
+        FROM TB_PACKAGE_INFO
+        WHERE PACKAGE_CODE LIKE 'PKG%'
+        ) AS subquery
+        WHERE <include refid="countryRegionCheck" />
+        AND <include refid="CRUDCondition" />;
+    </insert>
+
+    <!-- UPDATE 쿼리 -->
+    <update id="updatePackage" parameterType="hashmap">
+        UPDATE TB_PACKAGE_INFO
+        SET
+        PACKAGE_NAME = #{packageName},
+        START_DATE = #{startDate},
+        END_DATE = #{endDate},
+        HOTEL_CODE = #{hotelCode},
+        FLIGHT_CODE = #{flightCode},
+        AGENCY_CODE = #{agencyCode},
+        TOTAL_PRICE = <include refid="calculateTotalPrice"/>,
+        SALE_PRICE = <include refid="calculateTotalPrice"/> * 1.2,
+        SALE_START_DATE = #{saleStartDate},
+        SALE_END_DATE = #{saleEndDate},
+        COUNTRY = #{country}
+        WHERE
+        PACKAGE_CODE = #{packageCode}
+        AND <include refid="countryRegionCheck"/>
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+    <!-- 단건 IS_USED 비활성화  -->
+    <update id="updatePackageYN" parameterType="hashmap">
+        UPDATE TB_PACKAGE_INFO
+        SET IS_USED = 'N'
+        WHERE
+        PACKAGE_CODE = #{packageCode}
+        AND <include refid="CRUDCondition"/>;
+    </update>
+
+    <!--생성된후 진행중인 패키지 승인여부(1000= 진행중, 2000=승인, 3000=반려)-->
+    <update id="assignPackage" parameterType="hashmap">
+        UPDATE TB_PACKAGE_INFO
+        SET ASSIGN_CODE = #{assignCode}
+        WHERE
+        PACKAGE_CODE = #{packageCode}
+        AND <include refid="managerCondition"/>;
+    </update>
+</mapper>

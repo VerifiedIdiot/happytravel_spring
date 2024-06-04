@@ -1,0 +1,44 @@
+# Maven 관련 파일 및 디렉토리 무시
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IntelliJ IDEA 설정 파일 무시
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse 설정 파일 무시
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans 설정 파일 무시
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Visual Studio Code 설정 파일 무시
+.vscode/
+
+# Mac OS 시스템 파일 무시
+.DS_Store
+
+# 민감한 정보들을 내포하고있는 파일들 무시
+src/main/webapp/WEB-INF/applicationContext.xml
+src/main/webapp/WEB-INF/web.xml
+.idea
