@@ -102,6 +102,7 @@
         WHERE
         <include refid="readCondition"/>
         AND IS_USED != 'N'
+        AND ASSIGN_CODE = #{assignCode}
         ORDER BY
         package_code
         LIMIT #{limit} OFFSET #{offset}
@@ -114,6 +115,7 @@
         WHERE
         <include refid="readCondition"/>
         AND IS_USED != 'N'
+        AND ASSIGN_CODE = #{assignCode}
     </select>
     <!-- 단건 조회 -->
     <select id="selectPackage" resultType="kr.happytravel.erp.sales.model.sales.packages.PackageDTO"

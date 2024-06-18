@@ -42,7 +42,7 @@ public class PackageController {
             int result = packageService.getPackageCnt(paramMap);
             if (result == 0) {
                 logger.warn("PackageCnt not found with parameters: " + paramMap);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+                return ResponseEntity.ok(result);
             }
             return ResponseEntity.ok(result);
         } catch (Exception e) {
