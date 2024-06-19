@@ -22,7 +22,7 @@ public class FileUtil {
         String os = System.getProperty("os.name").toLowerCase();
         String basePath;
         if (os.contains("win")) {
-            basePath = "\\\\serverr";
+            basePath = "\\\\server";
         } else if (os.contains("mac")) {
             basePath = "/Volumes";
         } else {
