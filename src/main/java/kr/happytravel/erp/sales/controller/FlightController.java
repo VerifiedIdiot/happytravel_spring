@@ -105,13 +105,14 @@ public class FlightController {
         }
     }
 
-    // Y/N UPDATE
     @PutMapping("/flight-yn")
     public ResponseEntity<Boolean> updateFlightYN(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                              HttpServletResponse response, HttpSession session) throws Exception {
+                                                  HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to Y/N flight with parameters: " + paramMap);
-            return ResponseEntity.ok(flightService.updateFlight(paramMap) == 1);
+            boolean result = flightService.updateFlightYN(paramMap) == 1;
+            logger.info("Update flight Y/N result: " + result);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             logger.error("An error occurred: " + e.getMessage(), e);
             return ResponseEntity.ok(false);

@@ -139,11 +139,11 @@
     </update>
 
     <!-- 단건 IS_USED 비활성화  -->
-    <update id="updateFlightYN" parameterType="map">
+    <update id="updateFlightYN" parameterType="hashmap">
         UPDATE TB_FLIGHT_INFO
         SET IS_USED = 'N'
         WHERE
-        FLIGHT_CODE = #{flight_code}
+        FLIGHT_CODE = #{flightCode}
         AND <include refid="CRUDCondition"/>;
     </update>
 
