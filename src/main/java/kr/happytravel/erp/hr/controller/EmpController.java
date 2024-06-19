@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -36,13 +35,6 @@ public class EmpController {
 
     @Autowired
     private FileUtil fileUtil;
-
-    @Value("${IDPhoto.rootPath}")
-    private String rootPath;
-    @Value("${IDPhoto.mainPath}")
-    private String mainPath;
-    @Value("${IDPhoto.subPath}")
-    private String subPath;
 
     /** 사원 전체 조회 */
     @GetMapping("/emp-list")
@@ -148,20 +140,6 @@ public class EmpController {
         }
     }
 
-//    //공통모듈로 빼기
-//    private Path getUploadPath() {
-//        String os = System.getProperty("os.name").toLowerCase();
-//        String basePath;
-//        if (os.contains("win")) {
-//            basePath = "\\\\serverr";
-//        } else if (os.contains("mac")) {
-//            basePath = "/Volumes";
-//        } else {
-//            throw new RuntimeException("지원되지 않는 운영 체제입니다: " + os);
-//        }
-//        return Paths.get(basePath, rootPath, mainPath, subPath, File.separator);
-//    }
-
 
     /** 신규 사원 등록 */
     @PostMapping("/emp-save")
@@ -181,7 +159,7 @@ public class EmpController {
          }
 
             // 파일 처리
-            String fileName = empService.handleFileUpload(file, rootPath, mainPath, subPath);
+            String fileName = empService.handleFileUpload(file);
             if (fileName != null) {
                saveEmpInfo.setPhotoUrl(fileName);
             }
@@ -220,7 +198,7 @@ public class EmpController {
             }
 
             // 파일 처리
-            String fileName = empService.handleFileUpload(file, rootPath, mainPath, subPath);
+            String fileName = empService.handleFileUpload(file);
             if(fileName != null) {
                 updateEmpInfo.setPhotoUrl(fileName);
             }

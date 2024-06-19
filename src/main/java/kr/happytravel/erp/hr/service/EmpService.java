@@ -46,5 +46,5 @@ public interface EmpService {
     void updateEmp(EmpModel updateEmpInfo) throws Exception;
 
     /** 파일 처리 */
-    String handleFileUpload(MultipartFile file, String rootPath, String mainPath, String subPath);
+    String handleFileUpload(MultipartFile file);
 }

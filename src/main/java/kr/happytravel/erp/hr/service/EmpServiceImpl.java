@@ -120,7 +120,7 @@ private final EmpDao empDao;
 
     /** 파일 처리 */
     @Override
-    public String handleFileUpload(MultipartFile file, String rootPath, String mainPath, String subPath) {
+    public String handleFileUpload(MultipartFile file) {
         if(file == null || file.isEmpty()) {
             return null;
         }
@@ -142,18 +142,4 @@ private final EmpDao empDao;
         }
         return fileName;
     }
-
-//    private Path getUploadPath(String rootPath, String mainPath, String subPath) {
-//        String os = System.getProperty("os.name").toLowerCase();
-//        String basePath;
-//        if(os.contains("win")) {
-//            basePath = "\\\\serverr";
-//        } else if (os.contains("mac")) {
-//            basePath = "/Volumes";
-//        } else {
-//            throw new RuntimeException("지원되지 않는 운영 체제입니다: " + os);
-//        }
-//        return Paths.get(basePath, rootPath, mainPath, subPath, File.separator);
-//    }
-
 }
