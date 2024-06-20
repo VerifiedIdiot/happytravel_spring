@@ -30,7 +30,7 @@ public interface AttendanceManagementDao {
 
     List<AttendanceConfirmResponse> getAttendanceConfirmList(@Param("deptCode") String deptCode, @Param("limit") int limit, @Param("offset") int offset) throws Exception;
 
-    int getAttendanceConfirmListTotalCount() throws Exception;
+    int getAttendanceConfirmListTotalCount(@Param("deptCode") String deptCode) throws Exception;
     // 단건 조회
     AttendanceManagementModel selectAttendanceManagement(Map<String, Object> paramMap) throws Exception;
 

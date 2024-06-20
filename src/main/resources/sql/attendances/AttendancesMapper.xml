@@ -75,9 +75,11 @@
 		SELECT
 		    COUNT(*)
 		FROM
-		    TB_ATTENDANCE_MANAGEMENT
+		    TB_ATTENDANCE_MANAGEMENT am
+			JOIN TB_EMPLOYMENT_INFO ei ON am.EMP_ID = ei.EMP_ID
 		WHERE
-		    ASSIGN_CODE = '2000'
+		    am.ASSIGN_CODE = '2000'
+			AND ei.DEPT_CODE = #{deptCode}
 	</select>
 
 	<insert id="insertAttendanceManagement">

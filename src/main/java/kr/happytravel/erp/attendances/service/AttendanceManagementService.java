@@ -22,8 +22,6 @@ public interface AttendanceManagementService {
 
     AttendanceConfirmResponseDto getAttendanceConfirmList(String deptCode, int limit, int offset) throws Exception;
 
-    int getAttendanceConfirmListTotalCount() throws Exception;
-
     // 단건 등록
     int insertAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception;
 

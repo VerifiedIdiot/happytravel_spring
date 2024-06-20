@@ -35,14 +35,10 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     @Override
     public AttendanceConfirmResponseDto getAttendanceConfirmList(String deptCode, int limit, int offset) throws Exception {
         List<AttendanceConfirmResponse> attendanceConfirmList = attendanceManagementDao.getAttendanceConfirmList(deptCode, limit, offset);
-        int totalCount = attendanceManagementDao.getAttendanceConfirmListTotalCount();
+        int totalCount = attendanceManagementDao.getAttendanceConfirmListTotalCount(deptCode);
         return new AttendanceConfirmResponseDto(attendanceConfirmList, totalCount);
     }
 
-    @Override
-    public int getAttendanceConfirmListTotalCount() throws Exception {
-        return attendanceManagementDao.getAttendanceConfirmListTotalCount();
-    }
 
 
     @Override
