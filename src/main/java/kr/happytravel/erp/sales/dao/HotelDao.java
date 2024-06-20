@@ -29,7 +29,5 @@ public interface HotelDao {
     // 호텔 단건 삭제
     int updateHotelYN(Map<String, Object> paramMap) throws Exception;
 
-//    void setHotelCode(String newHotelCode);
-
     List<CountryDto> getCountries(Map<String, Object> paramMap) throws Exception;
 }

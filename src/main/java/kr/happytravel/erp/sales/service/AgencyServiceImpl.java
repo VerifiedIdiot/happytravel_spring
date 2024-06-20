@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     public List<AgencyDto> getAgencyList(Map<String, Object> paramMap) throws Exception {
-        // limit와 offset를 정수형으로 변환
+
         paramMap.put("limit", Integer.parseInt(paramMap.get("limit").toString()));
         paramMap.put("offset", Integer.parseInt(paramMap.get("offset").toString()));
 
@@ -68,5 +66,4 @@ public class AgencyServiceImpl implements AgencyService {
         logger.info("Selecting Countries from DAO");
         return agencyDao.getCountries(paramMap);
     }
-
 }
