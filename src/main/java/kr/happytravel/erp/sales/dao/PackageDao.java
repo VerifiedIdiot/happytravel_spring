@@ -40,4 +40,10 @@ public interface PackageDao {
     List<PartnerListDTO> getAgencyList(Map<String, Object> paramMap) throws Exception;
 
     int getAgencyCnt(Map<String, Object> paramMap) throws Exception;
+
+    // saleAmount 조작용 dao
+    List<InitSaleAmountModel> getPackageCodeList() throws Exception;
+
+    int updatePackageSaleAmount(Map<String, Object> updateParams) throws Exception;
+
 }

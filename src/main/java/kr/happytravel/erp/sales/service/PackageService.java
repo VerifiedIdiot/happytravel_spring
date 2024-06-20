@@ -40,4 +40,10 @@ public interface PackageService {
     List<PartnerListDTO> getAgencyList(Map<String, Object> paramMap) throws Exception;
 
     int getAgencyCnt(Map<String, Object> paramMap) throws Exception;
+
+    // saleAmount 조작용 서비스
+    void updatePackages() throws Exception;
+
+    // 초기화 메소드
+    void init() throws Exception;
 }
