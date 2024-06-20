@@ -45,3 +45,10 @@ src/main/webapp/WEB-INF/web.xml
 
 # Firebase Storage 민감한 정보 파일 무시
 src/main/resources/serviceAccountKey.json
+
+# vue build 파일 무시 - LSJ
+src/main/webapp/css/
+src/main/webapp/img/
+src/main/webapp/js/
+src/main/webapp/favicon.ico
+src/main/webapp/index.html
