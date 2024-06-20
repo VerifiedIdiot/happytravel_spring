@@ -23,4 +23,5 @@ public class AgencyDto {
     private String address; // ADDRESS
     private int price; // PRICE
     private String isUsed; // IS_USED
+    private String imageUrl;
 }

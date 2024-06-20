@@ -17,7 +17,8 @@ public class SocialInsurance {
 
 	public List<SalaryDataModel> socialInsuranceCalculate(List<SalaryItemModel> salaryItemModelList, String empId, String salaryDate, SalaryCalculateModel salaryCalculateModel) {
 		// 로그 메시지로 요청 파라미터 기록
-		logger.info("Received request for salary payment detail for employee ID: {} on year: {}. Item count: {}. Calculation model: {}", empId, salaryDate, salaryItemModelList.size(), salaryCalculateModel.toString());
+		logger.info("Received request for salary payment detail for employee ID: {} on year: {}. Item count: {}. Calculation model: {}", empId, salaryDate, salaryItemModelList.size(),
+				salaryCalculateModel.toString());
 
 		List<SalaryDataModel> salaryDataModelList = new ArrayList<SalaryDataModel>();
 

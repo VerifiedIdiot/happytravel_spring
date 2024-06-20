@@ -66,7 +66,8 @@
         c.korean_name as country,
         a.address,
         a.price,
-        a.is_used
+        a.is_used,
+        a.imageUrl
         FROM
         TB_AGENCY_INFO a
         LEFT JOIN TB_COUNTRY_INFO c ON a.COUNTRY_CODE = c.COUNTRY_CODE
@@ -90,6 +91,7 @@
         country_code,
         address,
         price,
+        imageUrl,
         is_used
         ) VALUES (
         (SELECT CONCAT('A', LPAD(IFNULL(MAX(CAST(SUBSTRING(agency_code, 2) AS UNSIGNED)) + 1, 1), 3, '0'))
@@ -99,6 +101,7 @@
         #{country_code},
         #{address},
         #{price},
+        #{imageUrl},
         'Y'
         )
     </insert>
@@ -112,7 +115,8 @@
         address = #{address},
         price = #{price},
         is_used = #{is_used},
-        country_code = #{country_code}
+        country_code = #{country_code},
+        imageUrl = #{imageUrl}
         WHERE
         agency_code = #{agency_code}
         AND <include refid="CRUDCondition"/>;
