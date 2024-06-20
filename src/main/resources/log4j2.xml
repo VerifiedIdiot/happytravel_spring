@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- log4j2 설정의 루트 요소, 로그 수준을 WARN으로 설정 -->
 <Configuration status="WARN">
-    <Appenders>
-        <!-- Console Appender with color-coded logging -->
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout disableAnsi="false" pattern="%style{%d{yyyy-MM-dd HH:mm:ss}}{cyan} %highlight{%-5level %c{1}:%L - %msg%n}{FATAL=bg_red, ERROR=red WARN=yellow INFO=green, DEBUG=blue, TRACE=magenta}"/>
-        </Console>
+	<Appenders>
+		<!-- 콘솔 출력 Appender, 색상이 있는 로깅을 지원 -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- 로그 출력 패턴과 색상 설정 -->
+			<PatternLayout disableAnsi="false" pattern="%style{%d{yyyy-MM-dd HH:mm:ss}}{cyan} %highlight{%-5level %c{1}:%L - %msg%n}{FATAL=bg_red, ERROR=red WARN=yellow INFO=green, DEBUG=blue, TRACE=magenta}" />
+		</Console>
 
-        <!-- File Appender -->
-        <File name="File" fileName="logs/app.log" append="true">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1}:%L - %msg%n"/>
-        </File>
-    </Appenders>
-    <Loggers>
-        <Root level="info">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Root>
+		<!-- 파일 출력 Appender -->
+		<File name="File" fileName="logs/app.log" append="true">
+			<!-- 로그 출력 패턴 설정 -->
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1}:%L - %msg%n" />
+		</File>
+	</Appenders>
+	<Loggers>
+		<!-- 루트 로거 설정, 기본 로그 수준을 INFO로 설정 -->
+		<Root level="info">
+			<!-- 콘솔 Appender를 루트 로거에 추가 -->
+			<AppenderRef ref="Console" />
+			<!-- 파일 Appender를 루트 로거에 추가 -->
+			<AppenderRef ref="File" />
+		</Root>
 
-<!--        &lt;!&ndash; MyBatis SQL Logger &ndash;&gt;-->
-<!--        <Logger name="org.mybatis" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--            <AppenderRef ref="File"/>-->
-<!--        </Logger>-->
-        <!-- Specific Logger for debugging -->
-        <Logger name="kr.happytravel" level="debug" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Logger>
-    </Loggers>
+		<!-- MyBatis SQL 로거 설정, 디버깅용 -->
+		<!-- MyBatis 로거, 로그 수준을 DEBUG로 설정 -->
+		<Logger name="org.mybatis" level="debug" additivity="false">
+			<!-- 콘솔과 파일 Appender를 MyBatis 로거에 추가 -->
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</Logger>
+
+		<!-- 특정 패키지 로거 설정, 디버깅용 -->
+		<!-- kr.happytravel 패키지의 로그 수준을 DEBUG로 설정 -->
+		<Logger name="kr.happytravel" level="debug" additivity="false">
+			<!-- 콘솔 Appender를 kr.happytravel 로거에 추가 -->
+			<AppenderRef ref="Console" />
+			<!-- 파일 Appender를 kr.happytravel 로거에 추가 -->
+			<AppenderRef ref="File" />
+		</Logger>
+	</Loggers>
 </Configuration>

@@ -23,11 +23,12 @@ public class FileUtil {
         String basePath;
         if (os.contains("win")) {
             basePath = "Y:";
+            return Paths.get(basePath, mainPath, subPath, File.separator);
         } else if (os.contains("mac")) {
             basePath = "/Volumes";
+            return Paths.get(basePath, rootPath, mainPath, subPath, File.separator);
         } else {
             throw new RuntimeException("지원되지 않는 운영 체제입니다: " + os);
         }
-        return Paths.get(basePath, rootPath, mainPath, subPath, File.separator);
     }
 }
