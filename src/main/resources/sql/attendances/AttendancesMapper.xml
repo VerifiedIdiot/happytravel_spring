@@ -91,7 +91,6 @@
 		start_date,
 		end_date,
 		assign_code,
-		assign_emp_id,
 		creation_date,
 		title,
 		reason
@@ -102,7 +101,6 @@
 		#{startDate},
 		#{endDate},
 		#{assignCode},
-		#{assignEmpId},
 		#{creationDate},
 		#{title},
 		#{reason}
@@ -134,8 +132,8 @@
 		SELECT COUNT(*)
 		FROM TB_ATTENDANCE
 		WHERE EMP_ID = #{empId}
-		  AND today >= DATE_FORMAT(CURDATE(), '%Y%m01')
-		  AND today < DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y%m01');
+		  AND today >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		  AND today < DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01');
 		]]>
 	</select>
 </mapper>
