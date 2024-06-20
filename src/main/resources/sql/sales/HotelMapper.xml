@@ -121,11 +121,11 @@
     </update>
 
     <!-- 단건 IS_USED 비활성화  -->
-    <update id="updateHotelYN" parameterType="map">
+    <update id="updateHotelYN" parameterType="hashmap">
         UPDATE TB_HOTEL_INFO
         SET IS_USED = 'N'
         WHERE
-        HOTEL_CODE = #{hotel_code}
+        HOTEL_CODE = #{hotelCode}
         AND <include refid="CRUDCondition"/>;
     </update>
 
