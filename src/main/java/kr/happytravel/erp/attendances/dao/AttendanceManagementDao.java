@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface AttendanceManagementDao {
     // 전체 조회
-    List<AttendanceManageResponse> getAttendanceManagementList() throws Exception;
+    List<AttendanceManageResponse> getAttendanceManagementList(@Param("deptCode") String deptCode) throws Exception;
 
     /**
      * 근태 상태가 대기인 근태코드를 결재완료로 변경
@@ -28,7 +28,7 @@ public interface AttendanceManagementDao {
      */
     void updateAssignCodeToRejected(String AttendanceCode) throws Exception;
 
-    List<AttendanceConfirmResponse> getAttendanceConfirmList(@Param("limit") int limit, @Param("offset") int offset) throws Exception;
+    List<AttendanceConfirmResponse> getAttendanceConfirmList(@Param("deptCode") String deptCode, @Param("limit") int limit, @Param("offset") int offset) throws Exception;
 
     int getAttendanceConfirmListTotalCount() throws Exception;
     // 단건 조회

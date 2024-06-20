@@ -18,8 +18,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     private final AttendanceManagementDao attendanceManagementDao;
 
     @Override
-    public List<AttendanceManageResponse> getAttendanceManagementList() throws Exception {
-        return attendanceManagementDao.getAttendanceManagementList();
+    public List<AttendanceManageResponse> getAttendanceManagementList(String deptCode) throws Exception {
+        return attendanceManagementDao.getAttendanceManagementList(deptCode);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     }
 
     @Override
-    public AttendanceConfirmResponseDto getAttendanceConfirmList(int limit, int offset) throws Exception {
-        List<AttendanceConfirmResponse> attendanceConfirmList = attendanceManagementDao.getAttendanceConfirmList(limit, offset);
+    public AttendanceConfirmResponseDto getAttendanceConfirmList(String deptCode, int limit, int offset) throws Exception {
+        List<AttendanceConfirmResponse> attendanceConfirmList = attendanceManagementDao.getAttendanceConfirmList(deptCode, limit, offset);
         int totalCount = attendanceManagementDao.getAttendanceConfirmListTotalCount();
         return new AttendanceConfirmResponseDto(attendanceConfirmList, totalCount);
     }

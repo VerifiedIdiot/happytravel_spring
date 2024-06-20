@@ -45,10 +45,10 @@ public class AttendanceManagementController {
 
     // Read (List)
     @GetMapping("/attendanceManagement")
-    public ResponseEntity<List<AttendanceManageResponse>> getAttendanceManagementList() throws Exception {
+    public ResponseEntity<List<AttendanceManageResponse>> getAttendanceManagementList(@RequestParam String deptCode) throws Exception {
         try {
             logger.info("Received request to get attendanceManagements: ");
-            List<AttendanceManageResponse> attendanceManagements = attendanceManagementService.getAttendanceManagementList();
+            List<AttendanceManageResponse> attendanceManagements = attendanceManagementService.getAttendanceManagementList(deptCode);
             logger.info("Fetched " + attendanceManagements.size() + " attendanceManagements.");
             return ResponseEntity.ok(attendanceManagements);
         } catch (IllegalArgumentException e) {
@@ -86,11 +86,12 @@ public class AttendanceManagementController {
 
     // Read (list)
     @GetMapping("/attendanceConfirm")
-    public ResponseEntity<AttendanceConfirmResponseDto> getAttendanceConfirmList(@RequestParam(defaultValue = "5") int limit,
+    public ResponseEntity<AttendanceConfirmResponseDto> getAttendanceConfirmList(@RequestParam String deptCode,
+                                                                                 @RequestParam(defaultValue = "5") int limit,
                                                                                  @RequestParam(defaultValue = "0") int offset) throws Exception {
         try {
             logger.info("Received request to get attendanceConfirm: ");
-            AttendanceConfirmResponseDto attendanceConfirm = attendanceManagementService.getAttendanceConfirmList(limit, offset);
+            AttendanceConfirmResponseDto attendanceConfirm = attendanceManagementService.getAttendanceConfirmList(deptCode, limit, offset);
             logger.info("Fetched " + attendanceConfirm + " attendanceConfirm.");
             return ResponseEntity.ok(attendanceConfirm);
         } catch (IllegalArgumentException e) {

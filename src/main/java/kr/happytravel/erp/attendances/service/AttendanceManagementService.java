@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface AttendanceManagementService {
     // 전체 조회
-    List<AttendanceManageResponse> getAttendanceManagementList() throws Exception;
+    List<AttendanceManageResponse> getAttendanceManagementList(String deptCode) throws Exception;
 
     // 단건 조회
     AttendanceManagementModel selectAttendanceManagement(Map<String, Object> paramMap) throws Exception;
@@ -20,7 +20,7 @@ public interface AttendanceManagementService {
 
     void updateAssignCodeToRejected(String AttendanceCode) throws Exception;
 
-    AttendanceConfirmResponseDto getAttendanceConfirmList(int limit, int offset) throws Exception;
+    AttendanceConfirmResponseDto getAttendanceConfirmList(String deptCode, int limit, int offset) throws Exception;
 
     int getAttendanceConfirmListTotalCount() throws Exception;
 
