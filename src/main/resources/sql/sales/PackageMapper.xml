@@ -359,23 +359,24 @@
         AND COUNTRY_CODE = #{countryCode}
     </select>
 
-    <!--    판매량을 조작하기위한 조회쿼리-->
-    <select id="getPackageCodeList" parameterType="hashmap" resultType="kr.happytravel.erp.sales.model.sales.packages.InitSaleAmountModel">
-        SELECT PACKAGE_CODE, SALE_AMOUNT
+    <!-- 판매량을 조작하기위한 조회쿼리 -->
+    <select id="getPackageCodeList" parameterType="hashmap" resultType="kr.happytravel.erp.sales.model.sales.packages.InitPackageModel">
+        SELECT PACKAGE_CODE, SALE_AMOUNT, SALE_END_DATE, IS_USED
         FROM TB_PACKAGE_INFO
         WHERE IS_USED != 'N' AND
         ASSIGN_CODE = '2000'
     </select>
 
-    <!--판매량을 조작하기 위한 업데이트 -->
+    <!-- 판매량을 조작하기 위한 업데이트 -->
     <update id="updatePackageSaleAmount" parameterType="hashmap">
         <foreach collection="list" item="item" separator=";">
             UPDATE TB_PACKAGE_INFO
-            SET SALE_AMOUNT = #{item.saleAmount}
+            SET SALE_AMOUNT = #{item.saleAmount},
+            IS_USED = #{item.isUsed}
             WHERE PACKAGE_CODE = #{item.packageCode}
-            AND IS_USED != 'N'
         </foreach>
     </update>
+
 
 
 </mapper>

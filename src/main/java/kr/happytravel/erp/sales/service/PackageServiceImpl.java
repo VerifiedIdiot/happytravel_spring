@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -129,21 +128,37 @@ public class PackageServiceImpl implements PackageService {
     @Override
     @Transactional
     public void updatePackages() throws Exception {
-        logger.info("Starting transaction");
+        logger.info("패키지 판매량 랜덤 생성중");
+        logger.info("판매가능 기간 상품 YN ='N' 처리중");
 
-        List<InitSaleAmountModel> packages = packageDao.getPackageCodeList();
-        for (InitSaleAmountModel pkg : packages) {
-            logger.info(pkg);
-        }
+        List<InitPackageModel> packages = packageDao.getPackageCodeList();
+
         if (packages == null || packages.isEmpty()) {
             logger.error("No packages found for update.");
             return;
         }
 
+        LocalDateTime now = LocalDateTime.now();
+
         // 조회된 패키지들 조작
-        for (InitSaleAmountModel pkg : packages) {
-            int randomValue = 10 + random.nextInt(21); // 10과 30 사이의 랜덤값
-            pkg.setSaleAmount(pkg.getSaleAmount() + randomValue);
+        for (InitPackageModel pkg : packages) {
+            if (pkg == null) {
+                continue;
+            }
+
+            Date saleEndDate = pkg.getSaleEndDate();
+            if (saleEndDate == null) {
+                logger.warn("Package with code {} has null sale end date", pkg.getPackageCode());
+                continue;
+            }
+
+            LocalDateTime saleEndDateTime = saleEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (saleEndDateTime.isBefore(now)) {
+                pkg.setIsUsed("N");
+            } else {
+                int randomValue = 10 + random.nextInt(21); // 10과 30 사이의 랜덤값
+                pkg.setSaleAmount(pkg.getSaleAmount() + randomValue);
+            }
         }
 
         // 패키지들을 업데이트 쿼리에 전달
@@ -151,16 +166,19 @@ public class PackageServiceImpl implements PackageService {
         updateParams.put("list", packages);
         int result = packageDao.updatePackageSaleAmount(updateParams);
 
+        logger.info("패키지 판매량 랜덤 생성 처리완료");
+        logger.info("판매가능 기간 상품 YN ='N' 처리완료");
         logger.info("Update result: " + result);
     }
 
     @PostConstruct
     public void init() {
         try {
-            logger.info("패키지 판매량 주작중");
+            logger.info("PostConstruct 실행");
             updatePackages();
         } catch (Exception e) {
             logger.error("Error during initialization: ", e);
         }
     }
+
 }
