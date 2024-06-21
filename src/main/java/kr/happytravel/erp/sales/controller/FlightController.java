@@ -27,7 +27,7 @@ public class FlightController {
     // Create
     @PostMapping("/flight")
     public ResponseEntity<Boolean> insertFlight(@RequestBody Map<String, Object> paramMap, HttpServletRequest request,
-                                               HttpServletResponse response, HttpSession session) throws Exception {
+                                                HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to create flight: " + paramMap);
             return ResponseEntity.ok(flightService.insertFlight(paramMap) == 1 );
@@ -55,7 +55,7 @@ public class FlightController {
     // Read (Single)
     @GetMapping("/flight-detail")
     public ResponseEntity<FlightDto> getFlight(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                 HttpServletResponse response, HttpSession session) throws Exception {
+                                               HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to get flight with parameters: " + paramMap);
             // 파라미터 확인
@@ -95,7 +95,7 @@ public class FlightController {
     // Update
     @PutMapping("/flight")
     public ResponseEntity<Boolean> updateFlight(@RequestBody Map<String, Object> paramMap, HttpServletRequest request,
-                                               HttpServletResponse response, HttpSession session) throws Exception {
+                                                HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to update flight: " + paramMap);
             return ResponseEntity.ok(flightService.updateFlight(paramMap) == 1);
