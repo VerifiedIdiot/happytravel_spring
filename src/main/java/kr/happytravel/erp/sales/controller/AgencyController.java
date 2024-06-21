@@ -26,7 +26,7 @@ public class AgencyController {
     // Create
     @PostMapping("/agency")
     public ResponseEntity<Boolean> insertAgency(@RequestBody Map<String, Object> paramMap, HttpServletRequest request,
-                                               HttpServletResponse response, HttpSession session) throws Exception {
+                                                HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to create agency: " + paramMap);
             return ResponseEntity.ok(agencyService.insertAgency(paramMap)==1);
@@ -39,7 +39,7 @@ public class AgencyController {
     // Read (List)
     @GetMapping("/agency-list")
     public ResponseEntity<List<AgencyDto>> getAgencyList(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                           HttpServletResponse response, HttpSession session) throws Exception {
+                                                         HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request with parameters: " + paramMap);
             List<AgencyDto> agencies = agencyService.getAgencyList(paramMap);
@@ -54,7 +54,7 @@ public class AgencyController {
     // Read (Single)
     @GetMapping("/agency-detail")
     public ResponseEntity<AgencyDto> getAgency(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                 HttpServletResponse response, HttpSession session) throws Exception {
+                                               HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to get agency with parameters: " + paramMap);
             // 파라미터 확인
@@ -95,7 +95,7 @@ public class AgencyController {
     // Update
     @PutMapping("/agency")
     public ResponseEntity<Boolean> updateAgency(@RequestBody Map<String, Object> paramMap, HttpServletRequest request,
-                                               HttpServletResponse response, HttpSession session) throws Exception {
+                                                HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to update agency: " + paramMap);
             return ResponseEntity.ok(agencyService.updateAgency(paramMap) == 1);
@@ -108,7 +108,7 @@ public class AgencyController {
     // Y/N UPDATE
     @PutMapping("/agency-yn")
     public ResponseEntity<Boolean> updateAgencyYN(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                 HttpServletResponse response, HttpSession session) throws Exception {
+                                                  HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to Y/N with parameters: " + paramMap);
             return ResponseEntity.ok(agencyService.updateAgencyYN(paramMap) == 1);

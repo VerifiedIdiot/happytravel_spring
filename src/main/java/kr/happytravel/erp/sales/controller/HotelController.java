@@ -27,7 +27,7 @@ public class HotelController {
     // Create
     @PostMapping("/hotel")
     public ResponseEntity<Boolean> insertHotel(@RequestBody Map<String, Object> paramMap, HttpServletRequest request,
-                                              HttpServletResponse response, HttpSession session) throws Exception {
+                                               HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to create hotel: " + paramMap);
             return ResponseEntity.ok(hotelService.insertHotel(paramMap) == 1);
@@ -57,7 +57,7 @@ public class HotelController {
     // Read (List)
     @GetMapping("/hotel-list")
     public ResponseEntity<List<HotelDto>> getHotelList(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                         HttpServletResponse response, HttpSession session) throws Exception {
+                                                       HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request with parameters: " + paramMap);
 
@@ -73,7 +73,7 @@ public class HotelController {
     // Read (Single)
     @GetMapping("/hotel-detail")
     public ResponseEntity<HotelDto> getHotel(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                               HttpServletResponse response, HttpSession session) throws Exception {
+                                             HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to get hotel with parameters: " + paramMap);
             // 파라미터 확인

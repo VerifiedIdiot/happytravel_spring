@@ -23,7 +23,7 @@
         FROM happytravel.TB_EMPLOYMENT_INFO
         WHERE DEPT_CODE = 3000
         AND STATUS_CODE = 1000
-<!--        AND POS_CODE NOT IN (1000, 1100)-->
+        <!--        AND POS_CODE NOT IN (1000, 1100)-->
         AND EMP_ID = #{empId}
         )
     </sql>
@@ -72,11 +72,11 @@
         LEFT JOIN TB_COUNTRY_INFO c ON h.COUNTRY_CODE = c.COUNTRY_CODE
         WHERE hotel_code = #{hotelCode}
         AND EXISTS (
-            SELECT 1
-            FROM happytravel.TB_EMPLOYMENT_INFO
-            WHERE EMP_ID = #{empId}
-                AND (DEPT_CODE = 3000 OR DEPT_CODE = 9000)
-                AND STATUS_CODE = 1000
+        SELECT 1
+        FROM happytravel.TB_EMPLOYMENT_INFO
+        WHERE EMP_ID = #{empId}
+        AND (DEPT_CODE = 3000 OR DEPT_CODE = 9000)
+        AND STATUS_CODE = 1000
         )
     </select>
 

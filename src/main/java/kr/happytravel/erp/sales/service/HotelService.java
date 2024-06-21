@@ -29,4 +29,3 @@ public interface HotelService {
 
     List<CountryDto> getCountries (Map<String, Object> paramMap) throws Exception;
 }
-
