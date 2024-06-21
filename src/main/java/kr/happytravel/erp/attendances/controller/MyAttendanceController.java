@@ -60,7 +60,7 @@ public class MyAttendanceController {
 
     // Create
     @PostMapping("/add")
-    public ResponseEntity<String> insertAttendanceManagement(@RequestBody AttendanceManagementModel attendanceManagement, HttpServletRequest request,
+        public ResponseEntity<String> insertAttendanceManagement(@RequestBody AttendanceManagementModel attendanceManagement, HttpServletRequest request,
                                                              HttpServletResponse response, HttpSession session) throws Exception {
         try {
             logger.info("Received request to create attendanceManagement: " + attendanceManagement);
