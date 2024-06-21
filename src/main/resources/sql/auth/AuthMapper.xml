@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.happytravel.erp.auth.dao.AuthDao">
+	<!-- 로그인 조회 -->
+	<select id="login" resultType="kr.happytravel.erp.auth.model.LoginInfoModel">
+		SELECT  EMP_ID,
+		        EMP_NAME,
+		        DEPT_CODE,
+		        POS_CODE
+		FROM TB_EMPLOYMENT_INFO
+		WHERE EMP_ID = #{empId}
+		      AND PASSWORD = #{password}
+	</select>
+</mapper>
