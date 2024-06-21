@@ -22,7 +22,7 @@
         FROM happytravel.TB_EMPLOYMENT_INFO
         WHERE DEPT_CODE = 3000
         AND STATUS_CODE = 1000
-<!--        AND POS_CODE NOT IN (1000, 1100)-->
+        <!--        AND POS_CODE NOT IN (1000, 1100)-->
         AND EMP_ID = #{empId}
         )
     </sql>

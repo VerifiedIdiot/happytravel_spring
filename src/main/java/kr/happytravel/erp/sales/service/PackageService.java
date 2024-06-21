@@ -44,6 +44,7 @@ public interface PackageService {
     // saleAmount 조작용 서비스
     void updatePackages() throws Exception;
 
+
     // 초기화 메소드
     void init() throws Exception;
 }
