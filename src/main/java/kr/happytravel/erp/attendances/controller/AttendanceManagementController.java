@@ -25,24 +25,6 @@ public class AttendanceManagementController {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final AttendanceManagementService attendanceManagementService;
 
-    // Create
-    @PostMapping("/add")
-    public ResponseEntity<String> createAttendanceManagement(@RequestBody AttendanceManagementModel attendanceManagement, HttpServletRequest request,
-                                                             HttpServletResponse response, HttpSession session) throws Exception {
-        try {
-            logger.info("Received request to create attendanceManagement: " + attendanceManagement);
-            int result = attendanceManagementService.insertAttendanceManagement(attendanceManagement);
-            logger.info("Created attendance, result: " + result);
-            return ResponseEntity.ok("AttendanceManagement created successfully");
-        } catch (IllegalArgumentException e) {
-            logger.warn("Invalid argument: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            logger.error("An error occurred: " + e.getMessage(), e);
-            throw e;
-        }
-    }
-
     // Read (List)
     @GetMapping("/attendanceManagement")
     public ResponseEntity<List<AttendanceManageResponse>> getAttendanceManagementList(@RequestParam String deptCode) throws Exception {

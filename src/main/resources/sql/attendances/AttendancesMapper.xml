@@ -82,35 +82,6 @@
 			AND ei.DEPT_CODE = #{deptCode}
 	</select>
 
-	<insert id="insertAttendanceManagement">
-		<selectKey keyProperty="attendanceCode" resultType="string" order="BEFORE">
-			SELECT CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), LPAD(IFNULL(MAX(SUBSTRING(attendance_code, 7)), 0) + 1, 4, '0'))
-			FROM TB_ATTENDANCE_MANAGEMENT
-			WHERE attendance_code LIKE CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), '%')
-		</selectKey>
-		INSERT INTO TB_ATTENDANCE_MANAGEMENT (
-		attendance_code,
-		emp_id,
-		attendance_type_code,
-		start_date,
-		end_date,
-		assign_code,
-		creation_date,
-		title,
-		reason
-		) VALUES (
-		#{attendanceCode},
-		#{empId},
-		#{attendanceTypeCode},
-		#{startDate},
-		#{endDate},
-		#{assignCode},
-		#{creationDate},
-		#{title},
-		#{reason}
-		)
-	</insert>
-
 	<select id="getMaxAttendanceTypeCode" resultType="string" parameterType="string">
 		SELECT
 			MAX(attendance_code)

@@ -47,11 +47,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     }
 
     @Override
-    public int insertAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception {
-        return attendanceManagementDao.insertAttendanceManagement(attendanceManagement);
-    }
-
-    @Override
     public int updateAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception {
         return attendanceManagementDao.updateAttendanceManagement(attendanceManagement);
     }

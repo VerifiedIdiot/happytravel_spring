@@ -34,9 +34,6 @@ public interface AttendanceManagementDao {
     // 단건 조회
     AttendanceManagementModel selectAttendanceManagement(Map<String, Object> paramMap) throws Exception;
 
-    // 단건 등록
-    int insertAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception;
-
     // 단건 수정
     int updateAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception;
 
