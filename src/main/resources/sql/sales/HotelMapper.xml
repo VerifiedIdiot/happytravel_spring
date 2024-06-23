@@ -42,8 +42,12 @@
         FROM
         TB_HOTEL_INFO h
         LEFT JOIN TB_COUNTRY_INFO c ON h.country_code = c.country_code
-        WHERE <include refid="readCondition" />
-        AND IS_USED != 'N'
+        WHERE
+        <include refid="readCondition" />
+        AND h.is_used != 'N'
+        <if test="country_code != null">
+            AND h.country_code = #{country_code}
+        </if>
         ORDER BY
         h.hotel_code
         LIMIT #{limit} OFFSET #{offset}
@@ -53,8 +57,12 @@
     <select id="getHotelCnt" resultType="int" parameterType="map">
         SELECT COUNT(hotel_code)
         FROM TB_HOTEL_INFO
-        WHERE <include refid="readCondition"/>
-        AND IS_USED != 'N'
+        WHERE
+        <include refid="readCondition"/>
+        AND is_used != 'N'
+        <if test="country_code != null">
+            AND country_code = #{country_code}
+        </if>
     </select>
 
     <select id="selectHotel" resultType="kr.happytravel.erp.sales.dto.HotelDto" parameterType="hashmap">
@@ -70,14 +78,11 @@
         h.imageUrl
         FROM TB_HOTEL_INFO h
         LEFT JOIN TB_COUNTRY_INFO c ON h.COUNTRY_CODE = c.COUNTRY_CODE
-        WHERE hotel_code = #{hotelCode}
-        AND EXISTS (
-        SELECT 1
-        FROM happytravel.TB_EMPLOYMENT_INFO
-        WHERE EMP_ID = #{empId}
-        AND (DEPT_CODE = 3000 OR DEPT_CODE = 9000)
-        AND STATUS_CODE = 1000
-        )
+        LEFT JOIN happytravel.TB_EMPLOYMENT_INFO e ON e.EMP_ID = #{empId}
+        AND (e.DEPT_CODE = 3000 OR e.DEPT_CODE = 9000)
+        AND e.STATUS_CODE = 1000
+        WHERE h.hotel_code = #{hotelCode}
+        AND e.EMP_ID IS NOT NULL
     </select>
 
     <insert id="insertHotel" parameterType="hashmap">
@@ -117,7 +122,7 @@
         imageUrl = #{imageUrl}
         WHERE
         hotel_code = #{hotel_code}
-        AND <include refid="CRUDCondition"/>;
+        AND <include refid="CRUDCondition"/>
     </update>
 
     <!-- 단건 IS_USED 비활성화  -->
@@ -126,7 +131,7 @@
         SET IS_USED = 'N'
         WHERE
         HOTEL_CODE = #{hotelCode}
-        AND <include refid="CRUDCondition"/>;
+        AND <include refid="CRUDCondition"/>
     </update>
 
     <select id="getCountries" resultType="kr.happytravel.erp.sales.dto.CountryDto" parameterType="hashmap">
