@@ -12,8 +12,7 @@ import java.sql.Time;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyAttendanceResponseModel {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date day;
+    private String day;
     private Time inTime;
     private Time outTime;
 

@@ -25,30 +25,12 @@ public class AttendanceManagementController {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final AttendanceManagementService attendanceManagementService;
 
-    // Create
-    @PostMapping("/add")
-    public ResponseEntity<String> createAttendanceManagement(@RequestBody AttendanceManagementModel attendanceManagement, HttpServletRequest request,
-                                                             HttpServletResponse response, HttpSession session) throws Exception {
-        try {
-            logger.info("Received request to create attendanceManagement: " + attendanceManagement);
-            int result = attendanceManagementService.insertAttendanceManagement(attendanceManagement);
-            logger.info("Created attendance, result: " + result);
-            return ResponseEntity.ok("AttendanceManagement created successfully");
-        } catch (IllegalArgumentException e) {
-            logger.warn("Invalid argument: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            logger.error("An error occurred: " + e.getMessage(), e);
-            throw e;
-        }
-    }
-
     // Read (List)
     @GetMapping("/attendanceManagement")
-    public ResponseEntity<List<AttendanceManageResponse>> getAttendanceManagementList() throws Exception {
+    public ResponseEntity<List<AttendanceManageResponse>> getAttendanceManagementList(@RequestParam String deptCode) throws Exception {
         try {
             logger.info("Received request to get attendanceManagements: ");
-            List<AttendanceManageResponse> attendanceManagements = attendanceManagementService.getAttendanceManagementList();
+            List<AttendanceManageResponse> attendanceManagements = attendanceManagementService.getAttendanceManagementList(deptCode);
             logger.info("Fetched " + attendanceManagements.size() + " attendanceManagements.");
             return ResponseEntity.ok(attendanceManagements);
         } catch (IllegalArgumentException e) {
@@ -86,11 +68,12 @@ public class AttendanceManagementController {
 
     // Read (list)
     @GetMapping("/attendanceConfirm")
-    public ResponseEntity<AttendanceConfirmResponseDto> getAttendanceConfirmList(@RequestParam(defaultValue = "5") int limit,
+    public ResponseEntity<AttendanceConfirmResponseDto> getAttendanceConfirmList(@RequestParam String deptCode,
+                                                                                 @RequestParam(defaultValue = "5") int limit,
                                                                                  @RequestParam(defaultValue = "0") int offset) throws Exception {
         try {
             logger.info("Received request to get attendanceConfirm: ");
-            AttendanceConfirmResponseDto attendanceConfirm = attendanceManagementService.getAttendanceConfirmList(limit, offset);
+            AttendanceConfirmResponseDto attendanceConfirm = attendanceManagementService.getAttendanceConfirmList(deptCode, limit, offset);
             logger.info("Fetched " + attendanceConfirm + " attendanceConfirm.");
             return ResponseEntity.ok(attendanceConfirm);
         } catch (IllegalArgumentException e) {

@@ -26,6 +26,7 @@
 				JOIN TB_DEPARTMENT_INFO di ON ei.DEPT_CODE = di.DEPT_CODE
 		WHERE
 			am.ASSIGN_CODE = '1000'
+			AND ei.DEPT_CODE = #{deptCode}
 		ORDER BY
 		    am.CREATION_DATE
 	</select>
@@ -65,6 +66,7 @@
 				JOIN TB_EMPLOYMENT_INFO assign_ei ON am.ASSIGN_EMP_ID = assign_ei.EMP_ID
 		WHERE
 		    am.ASSIGN_CODE = '2000'
+			AND ei.DEPT_CODE = #{deptCode}
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -73,41 +75,12 @@
 		SELECT
 		    COUNT(*)
 		FROM
-		    TB_ATTENDANCE_MANAGEMENT
+		    TB_ATTENDANCE_MANAGEMENT am
+			JOIN TB_EMPLOYMENT_INFO ei ON am.EMP_ID = ei.EMP_ID
 		WHERE
-		    ASSIGN_CODE = '2000'
+		    am.ASSIGN_CODE = '2000'
+			AND ei.DEPT_CODE = #{deptCode}
 	</select>
-
-	<insert id="insertAttendanceManagement">
-		<selectKey keyProperty="attendanceCode" resultType="string" order="BEFORE">
-			SELECT CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), LPAD(IFNULL(MAX(SUBSTRING(attendance_code, 7)), 0) + 1, 4, '0'))
-			FROM TB_ATTENDANCE_MANAGEMENT
-			WHERE attendance_code LIKE CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), '%')
-		</selectKey>
-		INSERT INTO TB_ATTENDANCE_MANAGEMENT (
-		attendance_code,
-		emp_id,
-		attendance_type_code,
-		start_date,
-		end_date,
-		assign_code,
-		assign_emp_id,
-		creation_date,
-		title,
-		reason
-		) VALUES (
-		#{attendanceCode},
-		#{empId},
-		#{attendanceTypeCode},
-		#{startDate},
-		#{endDate},
-		#{assignCode},
-		#{assignEmpId},
-		#{creationDate},
-		#{title},
-		#{reason}
-		)
-	</insert>
 
 	<select id="getMaxAttendanceTypeCode" resultType="string" parameterType="string">
 		SELECT
@@ -134,8 +107,8 @@
 		SELECT COUNT(*)
 		FROM TB_ATTENDANCE
 		WHERE EMP_ID = #{empId}
-		  AND today >= DATE_FORMAT(CURDATE(), '%Y%m01')
-		  AND today < DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y%m01');
+		  AND today >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		  AND today < DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01');
 		]]>
 	</select>
 </mapper>

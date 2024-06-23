@@ -26,7 +26,6 @@ public class AttendanceManagementModel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endDate; // END_DATE
     private String assignCode; // ASSIGN_CODE
-    private String assignEmpId; // ASSIGN_EMP_ID
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
     private Date creationDate; // CREATE_DATE
     private String reason; // REASON
