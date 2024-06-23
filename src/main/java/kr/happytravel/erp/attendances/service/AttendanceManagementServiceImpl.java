@@ -18,8 +18,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     private final AttendanceManagementDao attendanceManagementDao;
 
     @Override
-    public List<AttendanceManageResponse> getAttendanceManagementList() throws Exception {
-        return attendanceManagementDao.getAttendanceManagementList();
+    public List<AttendanceManageResponse> getAttendanceManagementList(String deptCode) throws Exception {
+        return attendanceManagementDao.getAttendanceManagementList(deptCode);
     }
 
     @Override
@@ -33,26 +33,17 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
     }
 
     @Override
-    public AttendanceConfirmResponseDto getAttendanceConfirmList(int limit, int offset) throws Exception {
-        List<AttendanceConfirmResponse> attendanceConfirmList = attendanceManagementDao.getAttendanceConfirmList(limit, offset);
-        int totalCount = attendanceManagementDao.getAttendanceConfirmListTotalCount();
+    public AttendanceConfirmResponseDto getAttendanceConfirmList(String deptCode, int limit, int offset) throws Exception {
+        List<AttendanceConfirmResponse> attendanceConfirmList = attendanceManagementDao.getAttendanceConfirmList(deptCode, limit, offset);
+        int totalCount = attendanceManagementDao.getAttendanceConfirmListTotalCount(deptCode);
         return new AttendanceConfirmResponseDto(attendanceConfirmList, totalCount);
     }
 
-    @Override
-    public int getAttendanceConfirmListTotalCount() throws Exception {
-        return attendanceManagementDao.getAttendanceConfirmListTotalCount();
-    }
 
 
     @Override
     public AttendanceManagementModel selectAttendanceManagement(Map<String, Object> paramMap) throws Exception {
         return attendanceManagementDao.selectAttendanceManagement(paramMap);
-    }
-
-    @Override
-    public int insertAttendanceManagement(AttendanceManagementModel attendanceManagement) throws Exception {
-        return attendanceManagementDao.insertAttendanceManagement(attendanceManagement);
     }
 
     @Override

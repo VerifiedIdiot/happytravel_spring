@@ -13,6 +13,8 @@ public interface PackageService {
     // 전체 조회 카운트
     int getPackageCnt(Map<String, Object> paramMap) throws Exception;
 
+    List<PackageListDTO> searchPackageList(Map<String,Object> paramMap) throws Exception;
+
     // 단건 등록
     int insertPackage(Map<String, Object> paramMap) throws Exception;
 

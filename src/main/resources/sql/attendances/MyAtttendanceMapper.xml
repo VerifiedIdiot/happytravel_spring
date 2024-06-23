@@ -13,7 +13,6 @@
                 EMP_ID = #{empId}
     </select>
 
-
     <select id="getMyVacationList" parameterType="string" resultType="kr.happytravel.erp.attendances.model.MyVacationResponseModel">
         SELECT
             START_DATE as startDate,
@@ -25,4 +24,33 @@
             AND ATTENDANCE_TYPE_CODE IN ('5000', '5100', '5500')
             AND ASSIGN_CODE = '2000'
     </select>
+
+    <insert id="insertAttendanceManagement">
+        <selectKey keyProperty="attendanceCode" resultType="string" order="BEFORE">
+            SELECT CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), LPAD(IFNULL(MAX(SUBSTRING(attendance_code, 7)), 0) + 1, 4, '0'))
+            FROM TB_ATTENDANCE_MANAGEMENT
+            WHERE attendance_code LIKE CONCAT(DATE_FORMAT(NOW(), '%y%m%d'), '%')
+        </selectKey>
+        INSERT INTO TB_ATTENDANCE_MANAGEMENT (
+        attendance_code,
+        emp_id,
+        attendance_type_code,
+        start_date,
+        end_date,
+        assign_code,
+        creation_date,
+        title,
+        reason
+        ) VALUES (
+        #{attendanceCode},
+        #{empId},
+        #{attendanceTypeCode},
+        #{startDate},
+        #{endDate},
+        #{assignCode},
+        #{creationDate},
+        #{title},
+        #{reason}
+        )
+    </insert>
 </mapper>
