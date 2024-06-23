@@ -54,7 +54,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public int updateHotel(Map<String, Object> paramMap) throws Exception {
         logger.info("Starting for update Hotel");
-        paramMap.put("empId", "EMP30002");
+
 
         logger.info("Update parameters: {}", paramMap);
         int result = hotelDao.updateHotel(paramMap);
