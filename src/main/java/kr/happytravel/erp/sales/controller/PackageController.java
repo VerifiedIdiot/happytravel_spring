@@ -54,8 +54,7 @@ public class PackageController {
 
     // Read (List)
     @GetMapping("/package-list")
-    public ResponseEntity<List<PackageListDTO>> getPackageList(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,
-                                                               HttpServletResponse response, HttpSession session) throws Exception {
+    public ResponseEntity<List<PackageListDTO>> getPackageList(@RequestParam Map<String, Object> paramMap) throws Exception {
         try {
             logger.info("Received request with parameters: " + paramMap);
             List<PackageListDTO> packages = packageService.getPackageList(paramMap);
@@ -67,6 +66,18 @@ public class PackageController {
         }
     }
 
+    @GetMapping("/package-list-search")
+    public ResponseEntity<List<PackageListDTO>> searchPackageList(@RequestParam Map<String, Object> paramMap) throws Exception {
+        try {
+            logger.info("Received request with parameters: " + paramMap);
+            List<PackageListDTO> packages = packageService.getPackageList(paramMap);
+            logger.info("Fetched " + packages.size() + " packages.");
+            return ResponseEntity.ok(packages);
+        } catch (Exception e) {
+            logger.error("An error occurred: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
     // Read (Single)
     @GetMapping("/package-detail")
     public ResponseEntity<PackageDTO> getPackage(@RequestParam Map<String, Object> paramMap, HttpServletRequest request,

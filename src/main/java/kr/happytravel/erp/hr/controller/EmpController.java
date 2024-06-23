@@ -62,20 +62,20 @@ public class EmpController {
         try {
             logger.info("Received request to get emp with parameters: " + empId);
             EmpModel emp = empService.getEmpInfo(empId);
-            Path filePath = fileUtil.getUploadPath().resolve( emp.getPhotoUrl());
-//            Path filePath = Paths.get(photoUrl).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
+//            Path filePath = fileUtil.getUploadPath().resolve( emp.getPhotoUrl());
+////            Path filePath = Paths.get(photoUrl).normalize();
+//            Resource resource = new UrlResource(filePath.toUri());
             if(emp == null) {
                 logger.warn("Emp not found with parameters: " + empId);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             logger.info("Fetched emp: " + emp);
 
-            byte[] imageData = StreamUtils.copyToByteArray(resource.getInputStream());
-            String base64ImageData = Base64.getEncoder().encodeToString(imageData);
+//            byte[] imageData = StreamUtils.copyToByteArray(resource.getInputStream());
+//            String base64ImageData = Base64.getEncoder().encodeToString(imageData);
 
             Map<String, Object> result = new HashMap<>();
-            result.put("imageData", base64ImageData);
+//            result.put("imageData", base64ImageData);
             result.put("employee", emp);
 
             return ResponseEntity.ok(result);

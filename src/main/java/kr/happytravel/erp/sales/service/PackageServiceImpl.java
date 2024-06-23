@@ -36,6 +36,15 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
+    public List<PackageListDTO> searchPackageList(Map<String, Object> paramMap) throws Exception {
+        // limit와 offset를 정수형으로 변환
+        paramMap.put("limit", Integer.parseInt(paramMap.get("limit").toString()));
+        paramMap.put("offset", Integer.parseInt(paramMap.get("offset").toString()));
+
+        return packageDao.searchPackageList(paramMap);
+    }
+
+    @Override
     @Transactional
     public int insertPackage(Map<String, Object> paramMap) throws Exception {
         logger.info("Starting transaction for insertPackage");
@@ -164,11 +173,11 @@ public class PackageServiceImpl implements PackageService {
         // 패키지들을 업데이트 쿼리에 전달
         Map<String, Object> updateParams = new HashMap<>();
         updateParams.put("list", packages);
-        int result = packageDao.updatePackageSaleAmount(updateParams);
+        packageDao.updatePackageSaleAmount(updateParams);
 
         logger.info("패키지 판매량 랜덤 생성 처리완료");
-        logger.info("판매가능 기간 상품 YN ='N' 처리완료");
-        logger.info("Update result: " + result);
+        logger.info("판매가능 기간 지난 상품 YN ='N' 처리완료");
+
     }
 
     @PostConstruct
